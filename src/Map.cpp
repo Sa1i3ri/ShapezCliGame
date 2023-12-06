@@ -217,7 +217,9 @@ void Map::TransmissionBeltOperate(int x, int y,vector<TransmissionBelt*> *curTra
 
     if(curTrans->curTime == curTrans->interval){
         curTrans->curTime = 0;
-
+        if(curTrans->mineral->type==type::nullMineral){
+            return;
+        }
         if(curTrans->dir == direction::up){
             if(x==0){
                 //越界
