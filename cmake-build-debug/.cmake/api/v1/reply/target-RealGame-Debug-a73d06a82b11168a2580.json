@@ -65,7 +65,9 @@
 				21,
 				23,
 				25,
-				27
+				27,
+				29,
+				31
 			]
 		}
 	],
@@ -115,7 +117,9 @@
 				21,
 				23,
 				25,
-				27
+				27,
+				29,
+				31
 			]
 		},
 		{
@@ -135,7 +139,9 @@
 				20,
 				22,
 				24,
-				26
+				26,
+				28,
+				30
 			]
 		}
 	],
@@ -286,13 +292,35 @@
 		},
 		{
 			"backtrace" : 1,
-			"path" : "Cursor.h",
+			"path" : "header/Cursor.h",
 			"sourceGroupIndex" : 1
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "Cursor.cpp",
+			"path" : "src/Cursor.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "header/Timer.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/Timer.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "header/NullMineral.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/NullMineral.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

@@ -6,19 +6,19 @@
 #define REALGAME_EQUIPMENT_H
 #include "Object.h"
 #include "Mineral.h"
-enum equipment{
-    extractor,
-    transmissionBelt,
-    cutter,
-    rubbishBin,
-};
+#include "NullObject.h"
+#include "NullMineral.h"
 
+//设置设备间隔
+const int ExtractorInterval = 3 , TransmissionBeltInterval = 1,RubbishBinInterval = 2,CutterInterval = 3;
 
 class Equipment : public Object {
 public:
-    equipment type;
     direction dir;
     Mineral *mineral;
+    int interval;
+    int curTime;
+    virtual void changeDirection(direction dir)=0;
 };
 
 

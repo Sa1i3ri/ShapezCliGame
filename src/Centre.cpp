@@ -7,6 +7,7 @@
 Centre::Centre() {
     this->color = white;
     this->photo = '@';
+    this->type = type::centre;
 }
 
 

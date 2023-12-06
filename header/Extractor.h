@@ -5,6 +5,7 @@
 #ifndef REALGAME_EXTRACTOR_H
 #define REALGAME_EXTRACTOR_H
 #include "Equipment.h"
+#include "NullMineral.h"
 
 
 
@@ -13,6 +14,9 @@ public:
 
     Extractor();
     Extractor(direction dir);
+    void deploy(Object *obj);
+
+    void changeDirection(direction dir)override;
 };
 
 

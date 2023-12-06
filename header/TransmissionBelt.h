@@ -11,6 +11,10 @@ class TransmissionBelt: public Equipment{
 public:
     TransmissionBelt();
     TransmissionBelt(direction dir);
+
+
+
+    void changeDirection(direction dir)override;
 };
 
 

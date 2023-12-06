@@ -17,9 +17,22 @@ enum direction{
     right,
 };
 
+enum type{
+    extractor,
+    transmissionBelt,
+    cutter,
+    rubbishBin,
+    Amineral,
+    Bmineral,
+    centre,
+    nullObject,
+    nullMineral,
+};
+
 
 class Object {
 public:
+    type type;
     int color;
     char photo;
 

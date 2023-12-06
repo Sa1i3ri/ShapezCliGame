@@ -7,4 +7,5 @@
 NullObject::NullObject() : Object() {
     this->color = white;
     this->photo = ' ';
+    this->type = type::nullObject;
 }

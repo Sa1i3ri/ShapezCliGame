@@ -7,9 +7,12 @@
 #include "Equipment.h"
 
 
+
 class RubbishBin: public Equipment{
 public:
     RubbishBin();
+
+    void changeDirection(direction dir)override;
 };
 
 

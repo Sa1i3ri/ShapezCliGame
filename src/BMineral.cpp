@@ -9,4 +9,5 @@ BMineral::BMineral() : Mineral() {
     this->color = blue;
     this->photo = '#';
     this->isCutble = false;
+    this->type = type::Bmineral;
 }

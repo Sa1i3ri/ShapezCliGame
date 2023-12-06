@@ -5,6 +5,7 @@
 #ifndef REALGAME_CUTTER_H
 #define REALGAME_CUTTER_H
 #include "Equipment.h"
+
 enum order{
     first,
     second
@@ -20,6 +21,8 @@ public:
     order ord;
     Cutter();
     Cutter(direction dir,order ord);
+
+    void changeDirection(direction dir)override;
 };
 
 

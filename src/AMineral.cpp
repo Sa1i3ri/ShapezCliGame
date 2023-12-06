@@ -9,4 +9,5 @@ AMineral::AMineral() : Mineral() {
     this->color = red;
     this->photo = '#';
     this->value = 1;
+    this->type = type::Amineral;
 }
