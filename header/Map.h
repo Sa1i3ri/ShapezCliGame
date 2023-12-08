@@ -14,6 +14,7 @@
 #include "Cutter.h"
 #include "AMineral.h"
 #include "BMineral.h"
+#include "HalfAMineral.h"
 #include "Cursor.h"
 #include "NullObject.h"
 #include "Centre.h"
@@ -29,6 +30,10 @@ private:
     void ExtractorOperate(int x,int y);
     void TransmissionBeltOperate(int x, int y,vector<TransmissionBelt*> *curTrans,vector<Equipment*> *ToDir);
     void Transmisson(vector<TransmissionBelt*> *curTrans,vector<Equipment*> *ToDir);
+    void RubbishBinOperate(int x,int y);
+    void CutterOperate(int x,int y);
+    void CentreOperate(int x,int y);
+    vector<int>* locateAnotherCutter(int x,int y,order ord,direction dir);
     void updateEquipmentCurTime(int x, int y);
 public:
     Cursor *cursor;

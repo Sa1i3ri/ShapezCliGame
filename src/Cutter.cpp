@@ -6,14 +6,14 @@
 
 Cutter::Cutter() {
     this->color = purple;
-    this->mineral = nullptr;
+    this->mineral = new NullMineral();
     this->type = cutter;
 }
 
 Cutter::Cutter(direction dir, order ord) {
     this->type = cutter;
     this->color = purple;
-    this->mineral = nullptr;
+    this->mineral = new NullMineral();
     this->dir = dir;
     this->ord = ord;
     this->interval = CutterInterval;

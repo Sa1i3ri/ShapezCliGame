@@ -27,6 +27,8 @@ enum type{
     centre,
     nullObject,
     nullMineral,
+    halfAmineral,
+    halfBmineral,
 };
 
 

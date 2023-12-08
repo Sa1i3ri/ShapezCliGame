@@ -6,6 +6,7 @@
 
 Map::Map() {
     this->cursor = new Cursor();
+    this->overallValue = 0;
 
     for(int i = 0;i<H;i++){
         for(int j = 0;j<W;j++){
@@ -63,7 +64,7 @@ void Map::transmission() {
 }
 
 void Map::cursorInputChoose(char input) {
-    if(input == '1' || input == '2' || input == '3' || input=='4' || input==' '||input=='r'){
+    if(input == '1' || input == '2' || input == '3' || input=='4' ||input=='5' || input==' '||input=='r'){
         Object *toFree = this->cursor->curObj;
         if(input == '1'){
             this->cursor->curObj = new TransmissionBelt(direction::up);
@@ -73,12 +74,9 @@ void Map::cursorInputChoose(char input) {
             this->cursor->curObj = new Cutter(direction::up,order::first);
         }else if(input =='4'){
             this->cursor->curObj = new RubbishBin();
+        }else if(input=='5'){
+            this->cursor->curObj = new NullObject();
         }else if(input==' '){
-
-            if(this->cursor->curObj->type == type::nullObject){
-                this->cursor->curObj = new NullObject();
-                return;
-            }
             //加入开采器
             if(this->cursor->curObj->type == type::extractor){
                 Extractor *curExt =(Extractor *) this->cursor->curObj;
@@ -86,23 +84,60 @@ void Map::cursorInputChoose(char input) {
             }
 
             //加入切割机
+
+
+
             if(this->cursor->curObj->type == type::cutter){
                 Cutter *curCutter = (Cutter *) this->cursor->curObj;
+                //四个方向
                 if(curCutter->dir == direction::up){
-                    if(this->cursor->y >=W-1){
+                    if(this->cursor->y ==W-1){
                         return;
                     }else{
                         //在map上加上另一半cutter
                         this->board[this->cursor->x][this->cursor->y+1] = new Cutter(direction::up,order::second);
                     }
+                }else if(curCutter->dir == direction::down){
+                    if(this->cursor->y ==0){
+                        return;
+                    }else{
+                        //在map上加上另一半cutter
+                        this->board[this->cursor->x][this->cursor->y-1] = new Cutter(direction::down,order::second);
+                    }
+                }else if(curCutter->dir == direction::left){
+                    if(this->cursor->x ==0){
+                        return;
+                    }else{
+                        //在map上加上另一半cutter
+                        this->board[this->cursor->x-1][this->cursor->y] = new Cutter(direction::left,order::second);
+                    }
+                }else if(curCutter->dir == direction::right){
+                    if(this->cursor->x ==H-1){
+                        return;
+                    }else{
+                        //在map上加上另一半cutter
+                        this->board[this->cursor->x+1][this->cursor->y] = new Cutter(direction::right,order::second);
+                    }
                 }
+
+
             }
-            //TODO
+            //加入垃圾桶和传送带，一下代码足矣
 
             //在map中加上光标现在的object
             this->board[this->cursor->x][this->cursor->y] = this->cursor->curObj;
             this->cursor->containedObj = this->board[this->cursor->x][this->cursor->y];
-            this->cursor->curObj = new NullObject();
+            if(this->cursor->curObj->type == type::transmissionBelt){
+                this->cursor->curObj = new TransmissionBelt(*(TransmissionBelt *)this->cursor->curObj);
+            }else if(this->cursor->curObj->type == type::extractor){
+                this->cursor->curObj = new Extractor(*(Extractor *)this->cursor->curObj);
+            }else if(this->cursor->curObj->type == type::cutter){
+                this->cursor->curObj = new Cutter(*(Cutter *)this->cursor->curObj);
+            }else if(this->cursor->curObj->type == type::rubbishBin){
+                this->cursor->curObj = new RubbishBin(*(RubbishBin *)this->cursor->curObj);
+            }
+
+
         }else if(input=='r'){
             //转向
             direction toDir = direction::up;
@@ -128,7 +163,6 @@ void Map::cursorInputChoose(char input) {
 
 void Map::ExtractorOperate(int x, int y) {
 
-
     if(this->board[x][y]->type != type::extractor){
         return;
     }
@@ -140,8 +174,15 @@ void Map::ExtractorOperate(int x, int y) {
         curExt->curTime=0;
         //时间到了才能执行
 
+        if(curExt->mineral->type == type::nullMineral){
+            return;
+        }
+
         //记录下extractor内矿物的种类
         type curMineralType = curExt->mineral->type;
+        if(curMineralType == type::nullMineral){
+            return;
+        }
 
         if(curExt->dir == direction::up){
             if(x==0){
@@ -150,7 +191,8 @@ void Map::ExtractorOperate(int x, int y) {
             }
             if(this->board[x-1][y]->type == type::transmissionBelt ||
                this->board[x-1][y]->type == type::cutter||
-               this->board[x-1][y]->type==type::rubbishBin){
+               this->board[x-1][y]->type==type::rubbishBin||
+               this->board[x-1][y]->type==type::centre){
                 //如果方向上是1.传送带 2.切割器 3.垃圾桶，那就工作
                 auto curDirTo = (Equipment *) this->board[x-1][y];
                 curDirTo->mineral = curExt->mineral;
@@ -162,7 +204,8 @@ void Map::ExtractorOperate(int x, int y) {
             }
             if(this->board[x+1][y]->type == type::transmissionBelt ||
                this->board[x+1][y]->type == type::cutter||
-               this->board[x+1][y]->type==type::rubbishBin){
+               this->board[x+1][y]->type==type::rubbishBin||
+                this->board[x+1][y]->type==type::centre){
                 //如果方向上是1.传送带 2.切割器 3.垃圾桶，那就工作
                 auto curDirTo = (Equipment *) this->board[x+1][y];
                 curDirTo->mineral = curExt->mineral;
@@ -174,7 +217,8 @@ void Map::ExtractorOperate(int x, int y) {
             }
             if(this->board[x][y-1]->type == type::transmissionBelt ||
                this->board[x][y-1]->type == type::cutter||
-               this->board[x][y-1]->type==type::rubbishBin){
+               this->board[x][y-1]->type==type::rubbishBin||
+                    this->board[x][y-1]->type==type::centre){
                 //如果方向上是1.传送带 2.切割器 3.垃圾桶，那就工作
                 auto curDirTo = (Equipment *) this->board[x][y-1];
                 curDirTo->mineral = curExt->mineral;
@@ -187,7 +231,8 @@ void Map::ExtractorOperate(int x, int y) {
             }
             if(this->board[x][y+1]->type == type::transmissionBelt ||
                this->board[x][y+1]->type == type::cutter||
-               this->board[x][y+1]->type==type::rubbishBin){
+               this->board[x][y+1]->type==type::rubbishBin||
+                    this->board[x][y+1]->type==type::centre){
                 //如果方向上是1.传送带 2.切割器 3.垃圾桶，那就工作
                 auto curDirTo = (Equipment *) this->board[x][y+1];
                 curDirTo->mineral = curExt->mineral;
@@ -227,7 +272,8 @@ void Map::TransmissionBeltOperate(int x, int y,vector<TransmissionBelt*> *curTra
             }
             if(this->board[x-1][y]->type == type::transmissionBelt ||
                this->board[x-1][y]->type == type::cutter||
-               this->board[x-1][y]->type==type::rubbishBin){
+               this->board[x-1][y]->type==type::rubbishBin||
+               this->board[x-1][y]->type==type::centre){
                 //如果方向上是1.传送带 2.切割器 3.垃圾桶，那就工作
                 auto curDirTo = (Equipment *) this->board[x-1][y];
                 if(curDirTo->mineral->type != type::nullMineral){
@@ -248,7 +294,8 @@ void Map::TransmissionBeltOperate(int x, int y,vector<TransmissionBelt*> *curTra
             }
             if(this->board[x+1][y]->type == type::transmissionBelt ||
                this->board[x+1][y]->type == type::cutter||
-               this->board[x+1][y]->type==type::rubbishBin){
+               this->board[x+1][y]->type==type::rubbishBin||
+               this->board[x+1][y]->type==type::centre){
                 //如果方向上是1.传送带 2.切割器 3.垃圾桶，那就工作
                 auto curDirTo = (Equipment *) this->board[x+1][y];
                 if(curDirTo->mineral->type != type::nullMineral){
@@ -269,7 +316,8 @@ void Map::TransmissionBeltOperate(int x, int y,vector<TransmissionBelt*> *curTra
             }
             if(this->board[x][y-1]->type == type::transmissionBelt ||
                this->board[x][y-1]->type == type::cutter||
-               this->board[x][y-1]->type==type::rubbishBin){
+               this->board[x][y-1]->type==type::rubbishBin||
+               this->board[x][y-1]->type==type::centre){
                 //如果方向上是1.传送带 2.切割器 3.垃圾桶，那就工作
                 auto curDirTo = (Equipment *) this->board[x][y-1];
                 if(curDirTo->mineral->type != type::nullMineral){
@@ -290,7 +338,8 @@ void Map::TransmissionBeltOperate(int x, int y,vector<TransmissionBelt*> *curTra
             }
             if(this->board[x][y+1]->type == type::transmissionBelt ||
                this->board[x][y+1]->type == type::cutter||
-               this->board[x][y+1]->type==type::rubbishBin){
+               this->board[x][y+1]->type==type::rubbishBin||
+               this->board[x][y+1]->type==type::centre){
                 //如果方向上是1.传送带 2.切割器 3.垃圾桶，那就工作
                 auto curDirTo = (Equipment *) this->board[x][y+1];
                 if(curDirTo->mineral->type != type::nullMineral){
@@ -318,6 +367,9 @@ void Map::operateEverything() {
         for(int j=0;j<W;j++){
             this->ExtractorOperate(i,j);
             this->TransmissionBeltOperate(i,j,curTrans,ToDir);
+            this->CutterOperate(i,j);
+            this->RubbishBinOperate(i,j);
+            this->CentreOperate(i,j);
             updateEquipmentCurTime(i,j);
         }
     }
@@ -331,7 +383,8 @@ void Map::updateEquipmentCurTime(int x, int y) {
     if (this->board[x][y]->type == type::transmissionBelt ||
         this->board[x][y]->type == type::cutter ||
         this->board[x][y]->type == type::extractor ||
-        this->board[x][y]->type == type::rubbishBin) {
+        this->board[x][y]->type == type::rubbishBin ||
+        this->board[x][y]->type == type::centre) {
         auto curEquipment = (Equipment *) this->board[x][y];
         curEquipment->curTime++;
     }
@@ -349,3 +402,204 @@ void Map::Transmisson(vector<TransmissionBelt *> *curTrans, vector<Equipment *> 
 
     }
 }
+
+void Map::RubbishBinOperate(int x, int y) {
+    if(this->board[x][y]->type != type::rubbishBin){
+        return;
+    }
+
+    auto curRubbishBin = (RubbishBin *) this->board[x][y];
+
+    if(curRubbishBin->curTime == curRubbishBin->interval){
+        curRubbishBin->curTime = 0;
+        if(curRubbishBin->mineral->type == type::nullMineral){
+            return;
+        }
+        ::free(curRubbishBin->mineral);
+        curRubbishBin->mineral = new NullMineral();
+    }
+
+
+
+}
+
+void Map::CutterOperate(int x, int y) {
+    if(this->board[x][y]->type != type::cutter){
+        return;
+    }
+
+    auto curCutter = (Cutter *) this->board[x][y];
+    if(curCutter->curTime == curCutter->interval){
+        //时间到了才能操作
+        curCutter->curTime = 0;
+        if(curCutter->mineral->type == type::nullMineral){
+            return;
+        }
+
+        auto curMineral = (Mineral *)curCutter->mineral;
+        if(curMineral->isCutble){
+            //可以被切割
+            //这个vector只有两个值，第一个为x坐标，第二个为y坐标
+            vector<int>* anotherCutterLocation = locateAnotherCutter(x,y,curCutter->ord,curCutter->dir);
+            int anotherX = (*anotherCutterLocation)[0];
+            int anotherY = (*anotherCutterLocation)[1];
+            if(curCutter->dir == direction::up){
+                if(x == 0){
+                    //越界
+                    return;
+                }
+                if( (this->board[x-1][y]->type == type::transmissionBelt ||
+                        this->board[x-1][y]->type == type::rubbishBin||
+                        this->board[x-1][y]->type == type::centre) &&
+                        (this->board[anotherX-1][anotherY]->type == type::transmissionBelt ||
+                        this->board[anotherX-1][anotherY]->type == type::rubbishBin||
+                                this->board[anotherX-1][anotherY]->type == type::centre)){
+                    //本Cutter和配套的Cutter的方向上都为传送带或者垃圾桶，才能输出
+                    auto curDirTo1 = (Equipment *) this->board[x-1][y];
+                    auto curDirTo2 = (Equipment *) this->board[anotherX-1][anotherY];
+                    if(curDirTo1->mineral->type != type::nullMineral ||curDirTo2->mineral->type != type::nullMineral){
+                        //如果方向上的下一个满了，就堵塞着
+                        return;
+                    }
+
+                    ::free(curCutter->mineral);
+                    curCutter->mineral = new NullMineral();
+                    curDirTo1->mineral = new HalfAMineral();
+                    curDirTo2->mineral = new HalfAMineral();
+
+                }
+            }else if(curCutter->dir == direction::down){
+                if(x == H-1){
+                    //越界
+                    return;
+                }
+                if( (this->board[x+1][y]->type == type::transmissionBelt ||
+                this->board[x+1][y]->type == type::rubbishBin ||
+                        this->board[x+1][y]->type == type::centre) &&
+                    (this->board[anotherX+1][anotherY]->type == type::transmissionBelt ||
+                     this->board[anotherX+1][anotherY]->type == type::rubbishBin||
+                            this->board[anotherX+1][anotherY]->type == type::centre)){
+                    //本Cutter和配套的Cutter的方向上都为传送带或者垃圾桶，才能输出
+                    auto curDirTo1 = (Equipment *) this->board[x+1][y];
+                    auto curDirTo2 = (Equipment *) this->board[anotherX+1][anotherY];
+                    if(curDirTo1->mineral->type != type::nullMineral ||curDirTo2->mineral->type != type::nullMineral){
+                        //如果方向上的下一个满了，就堵塞着
+                        return;
+                    }
+
+                    ::free(curCutter->mineral);
+                    curCutter->mineral = new NullMineral();
+                    curDirTo1->mineral = new HalfAMineral();
+                    curDirTo2->mineral = new HalfAMineral();
+
+                }
+            }else if(curCutter->dir == direction::left){
+                if(y==0){
+                    //越界
+                    return;
+                }
+                if( (this->board[x][y-1]->type == type::transmissionBelt ||
+                     this->board[x][y-1]->type == type::rubbishBin||
+                        this->board[x][y-1]->type == type::centre) &&
+                    (this->board[anotherX][anotherY-1]->type == type::transmissionBelt ||
+                     this->board[anotherX][anotherY-1]->type == type::rubbishBin||
+                            this->board[anotherX][anotherY-1]->type == type::centre)){
+                    //本Cutter和配套的Cutter的方向上都为传送带或者垃圾桶，才能输出
+                    auto curDirTo1 = (Equipment *) this->board[x][y-1];
+                    auto curDirTo2 = (Equipment *) this->board[anotherX][anotherY-1];
+                    if(curDirTo1->mineral->type != type::nullMineral ||curDirTo2->mineral->type != type::nullMineral){
+                        //如果方向上的下一个满了，就堵塞着
+                        return;
+                    }
+
+                    ::free(curCutter->mineral);
+                    curCutter->mineral = new NullMineral();
+                    curDirTo1->mineral = new HalfAMineral();
+                    curDirTo2->mineral = new HalfAMineral();
+
+                }
+            }else if(curCutter->dir == direction::right){
+                if(y==W-1){
+                    //越界
+                    return;
+                }
+                if( (this->board[x][y+1]->type == type::transmissionBelt ||
+                     this->board[x][y+1]->type == type::rubbishBin ||
+                        this->board[x][y+1]->type == type::centre) &&
+                    (this->board[anotherX][anotherY+1]->type == type::transmissionBelt ||
+                     this->board[anotherX][anotherY+1]->type == type::rubbishBin||
+                            this->board[anotherX][anotherY+1]->type == type::centre)){
+                    //本Cutter和配套的Cutter的方向上都为传送带或者垃圾桶，才能输出
+                    auto curDirTo1 = (Equipment *) this->board[x][y+1];
+                    auto curDirTo2 = (Equipment *) this->board[anotherX][anotherY+1];
+                    if(curDirTo1->mineral->type != type::nullMineral ||curDirTo2->mineral->type != type::nullMineral){
+                        //如果方向上的下一个满了，就堵塞着
+                        return;
+                    }
+
+                    ::free(curCutter->mineral);
+                    curCutter->mineral = new NullMineral();
+                    curDirTo1->mineral = new HalfAMineral();
+                    curDirTo2->mineral = new HalfAMineral();
+
+                }
+            }
+
+
+        }
+
+    }
+}
+
+vector<int>* Map::locateAnotherCutter(int x,int y,order ord,direction dir) {
+    auto *result = new vector<int>;
+    if(ord==order::first){
+        if(dir== direction::up){
+            result->push_back(x);
+            result->push_back(y+1);
+        } else if(dir == direction::down){
+            result->push_back(x);
+            result->push_back(y-1);
+        }else if(dir == direction::left){
+            result->push_back(x-1);
+            result->push_back(y);
+        }else if(dir == direction::right){
+            result->push_back(x+1);
+            result->push_back(y);
+        }
+    }else if(ord == order::second){
+        if(dir== direction::up){
+            result->push_back(x);
+            result->push_back(y-1);
+        } else if(dir == direction::down){
+            result->push_back(x);
+            result->push_back(y+1);
+        }else if(dir == direction::left){
+            result->push_back(x+1);
+            result->push_back(y);
+        }else if(dir == direction::right){
+            result->push_back(x-1);
+            result->push_back(y);
+        }
+    }
+    return result;
+}
+
+void Map::CentreOperate(int x, int y) {
+    if(this->board[x][y]->type != type::centre){
+        return;
+    }
+    auto curCentre = (Centre *) this->board[x][y];
+    if(curCentre->curTime == curCentre->interval){
+        curCentre->curTime = 0;
+        if(curCentre->mineral->type != type::nullMineral){
+            //加钱
+            this->overallValue += curCentre->mineral->value;
+            ::free(curCentre->mineral);
+            curCentre->mineral = new NullMineral();
+        }
+
+    }
+}
+
+

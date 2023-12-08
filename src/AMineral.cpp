@@ -8,6 +8,6 @@ AMineral::AMineral() : Mineral() {
     this->isCutble = true;
     this->color = red;
     this->photo = '#';
-    this->value = 1;
+    this->value = 2;
     this->type = type::Amineral;
 }

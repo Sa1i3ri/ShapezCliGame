@@ -4,16 +4,17 @@
 
 #ifndef REALGAME_CENTRE_H
 #define REALGAME_CENTRE_H
-#include "Object.h"
+#include "Equipment.h"
+#include "NullMineral.h"
 
 
-class Centre: public Object{
+class Centre: public Equipment{
 
 
 public:
 
     Centre();
-
+    void changeDirection(direction dir)override;
 
 };
 

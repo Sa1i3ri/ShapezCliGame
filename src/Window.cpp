@@ -44,6 +44,10 @@ void Window::display(Map *map) {
         }
         cout<<endl;
     }
+    color(indigo);
+    printf("overall money: %d\n",map->overallValue);
+
+
     color(white);
     printf("use keyboard to choose\n");
     color(green);
@@ -53,12 +57,17 @@ void Window::display(Map *map) {
     color(purple);
     printf("3:Cutter ");
     color(white);
-    printf("4:Rubbish bin");
+    printf("4:Rubbish bin ");
+    color(indigo);
+    printf("5:cleaner ");
     printf("\n");
+
+    color(white);
     printf("press p to continue\n");
     printf("press r to change direction\n");
 
-    ::printf("%c",map->cursor->curObj->photo);
+    color(map->cursor->curObj->color);
+    printf("%c",map->cursor->curObj->photo);
 
 }
 

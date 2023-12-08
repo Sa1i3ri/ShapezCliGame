@@ -5,6 +5,8 @@
 #ifndef REALGAME_CUTTER_H
 #define REALGAME_CUTTER_H
 #include "Equipment.h"
+#include "NullObject.h"
+#include "NullMineral.h"
 
 enum order{
     first,

@@ -22,7 +22,7 @@ void play(Window *window, Map *map){
             Sleep(10);
             continue;
         }
-        if(input == '1' || input == '2' || input == '3' || input=='4' || input==' '||input=='r'){
+        if(input == '1' || input == '2' || input == '3' || input=='4' ||input=='5'|| input==' '||input=='r'){
             map->cursorInputChoose(input);
             window->display(map);
             Sleep(10);

@@ -10,7 +10,7 @@
 #include "NullMineral.h"
 
 //设置设备间隔
-const int ExtractorInterval = 3 , TransmissionBeltInterval = 1,RubbishBinInterval = 2,CutterInterval = 3;
+const int ExtractorInterval = 3 , TransmissionBeltInterval = 1,RubbishBinInterval = 1,CutterInterval = 3;
 
 class Equipment : public Object {
 public:
