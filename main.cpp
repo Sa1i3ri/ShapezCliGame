@@ -12,126 +12,116 @@
 #include "header/BMineral.h"
 #include "header/Centre.h"
 #include "header/Timer.h"
-void play(Window *window, Map *map){
-    window->display(map);
+#include "header/Level.h"
+#include "header/MainInterface.h"
+#include "header/Store.h"
+
+Map *MainMap = new Map();
+MainInterface *mainInterface = new MainInterface();
+Store *store = new Store(MainMap);
+Window *window = new Window();
+
+
+Level *Level1 = new Level(LevelType::level1,MainMap);
+Level *Level2 = new Level(LevelType::level2,MainMap);
+Level *Level3 = new Level(LevelType::level3,MainMap);
+
+
+
+void play(Level *level){
+    level->LevelLoad();
+
+    window->display(MainMap);
     while (true){
         char input = getch();
         if(input =='w' || input=='s'||input=='a'||input=='d'){
-            map->moveCursor(map->inputForMoveCursor(input));
-            window->display(map);
-            Sleep(10);
-            continue;
+            //移动光标
+            MainMap->moveCursor(MainMap->inputForMoveCursor(input));
         }
         if(input == '1' || input == '2' || input == '3' || input=='4' ||input=='5'|| input==' '||input=='r'){
-            map->cursorInputChoose(input);
-            window->display(map);
-            Sleep(10);
-            continue;
+            //放置物品
+            MainMap->cursorInputChoose(input);
         }
         if(input == '0'){
-            break;
+            //退出
+            return;
         }
 
         if(input == 'p'){
-            map->operateEverything();
-            window->display(map);
+            //物品运作
+            MainMap->operateEverything();
         }
 
-    }
-
-}
-
-
-
-void init(Window *window,Map *map){
-    for(int i =0;i<H/5;i++){
-        for(int j =0;j<W/5;j++){
-            map->board[i][j] = new AMineral();
+        if(input == 'z' || input == 'x' || input =='c'){
+            //升级速率
+            level->upgrade(input);
         }
-    }
 
-    for(int i =H/5;i< 2 * H/5;i++){
-        for(int j =W/5;j< 2 * W/5 ;j++){
-            map->board[i][j] = new BMineral();
-        }
-    }
-
-    for(int i = H/2-1;i<=H/2+1;i++){
-        for(int j = W/2-1;j<=W/2+1;j++){
-            map->board[i][j]  = new Centre();
-        }
-    }
-
-
-    map->cursor->containedObj = map->board[map->cursor->x][map->cursor->y];
-
-
-
-
-}
-
-void test(Window *window,Map *map, char input){
-    window->display(map);
-    if(input =='w' || input=='s'||input=='a'||input=='d'){
-        map->moveCursor(map->inputForMoveCursor(input));
-        window->display(map);
+        window->display(MainMap);
         Sleep(10);
-        return;
-    }
-    if(input == '1' || input == '2' || input == '3' || input=='4' || input==' '||input=='r'){
-        map->cursorInputChoose(input);
-        window->display(map);
-        Sleep(10);
-        return;
-    }
-    if(input == '0'){
-        return;
+
     }
 
-    if(input == 'p'){
-        map->operateEverything();
-        window->display(map);
+}
+
+void enterStore() {
+    store->display();
+    while (true) {
+        char input = getch();
+        if (input == '0') {
+            if (input == '0') {
+                return;
+            }
+        }
+        store->display();
     }
 }
+
+void Interface(){
+    mainInterface->display(MainMap);
+    while (true){
+        char input = getch();
+        if(input=='1' || input=='2' || input=='3' || input=='0' || input=='s'){
+            if(input=='0'){
+                return;
+            }
+            //选关
+            if(input=='1'){
+                play(Level1);
+            }else if(input=='2'){
+                play(Level2);
+            }else if(input=='3'){
+                play(Level3);
+            }
+
+            if(input == 's'){
+                enterStore();
+            }
+
+            //进入商店
+
+        }
+
+        mainInterface->display(MainMap);
+        //Sleep(10);
+
+    }
+}
+
+
+
 
 
 
 int main(){
-    Map *map = new Map();
-    Window *window = new Window();
-    init(window,map);
 
 
+    //play(window,MainMap,Level2);
+    Interface();
 
-    play(window,map);
-
-
-//    test(window,map,'2');
-//    test(window,map,'r');
-//    test(window,map,' ');
-//    test(window,map,'d');
-//
-//    for(int i =0;i<10;i++){
-//
-//        test(window,map,'1');
-//        test(window,map,'r');
-//        test(window,map,' ');
-//        test(window,map,'d');
-//    }
-//
-//    window->display(map);
-//
-//    test(window,map,'p');
-//    window->display(map);
-//
-//    test(window,map,'p');
-//    window->display(map);
 
     Sleep(2000);
-//    map->cursorInputChoose('3');
-//    map->cursor->y  = 29;
-//    map->cursorInputChoose(' ');
-//    window->display(map);
+
     return 0;
 }
 

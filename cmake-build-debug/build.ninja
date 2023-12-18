@@ -151,6 +151,24 @@ build CMakeFiles/RealGame.dir/src/HalfAMineral.cpp.obj: CXX_COMPILER__RealGame_D
   OBJECT_DIR = CMakeFiles\RealGame.dir
   OBJECT_FILE_DIR = CMakeFiles\RealGame.dir\src
 
+build CMakeFiles/RealGame.dir/src/MainInterface.cpp.obj: CXX_COMPILER__RealGame_Debug D$:/Codes/C-plus-plus-advanced-programming/GreatHomework/RealGame/src/MainInterface.cpp || cmake_object_order_depends_target_RealGame
+  DEP_FILE = CMakeFiles\RealGame.dir\src\MainInterface.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\RealGame.dir
+  OBJECT_FILE_DIR = CMakeFiles\RealGame.dir\src
+
+build CMakeFiles/RealGame.dir/src/Level.cpp.obj: CXX_COMPILER__RealGame_Debug D$:/Codes/C-plus-plus-advanced-programming/GreatHomework/RealGame/src/Level.cpp || cmake_object_order_depends_target_RealGame
+  DEP_FILE = CMakeFiles\RealGame.dir\src\Level.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\RealGame.dir
+  OBJECT_FILE_DIR = CMakeFiles\RealGame.dir\src
+
+build CMakeFiles/RealGame.dir/src/Store.cpp.obj: CXX_COMPILER__RealGame_Debug D$:/Codes/C-plus-plus-advanced-programming/GreatHomework/RealGame/src/Store.cpp || cmake_object_order_depends_target_RealGame
+  DEP_FILE = CMakeFiles\RealGame.dir\src\Store.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\RealGame.dir
+  OBJECT_FILE_DIR = CMakeFiles\RealGame.dir\src
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target RealGame
@@ -159,7 +177,7 @@ build CMakeFiles/RealGame.dir/src/HalfAMineral.cpp.obj: CXX_COMPILER__RealGame_D
 #############################################
 # Link the executable RealGame.exe
 
-build RealGame.exe: CXX_EXECUTABLE_LINKER__RealGame_Debug CMakeFiles/RealGame.dir/main.cpp.obj CMakeFiles/RealGame.dir/src/Map.cpp.obj CMakeFiles/RealGame.dir/src/Object.cpp.obj CMakeFiles/RealGame.dir/src/NullObject.cpp.obj CMakeFiles/RealGame.dir/src/Window.cpp.obj CMakeFiles/RealGame.dir/src/Centre.cpp.obj CMakeFiles/RealGame.dir/src/AMineral.cpp.obj CMakeFiles/RealGame.dir/src/BMineral.cpp.obj CMakeFiles/RealGame.dir/src/Extractor.cpp.obj CMakeFiles/RealGame.dir/src/Equipment.cpp.obj CMakeFiles/RealGame.dir/src/TransmissionBelt.cpp.obj CMakeFiles/RealGame.dir/src/Cutter.cpp.obj CMakeFiles/RealGame.dir/src/RubbishBin.cpp.obj CMakeFiles/RealGame.dir/src/Cursor.cpp.obj CMakeFiles/RealGame.dir/src/Timer.cpp.obj CMakeFiles/RealGame.dir/src/NullMineral.cpp.obj CMakeFiles/RealGame.dir/src/HalfAMineral.cpp.obj
+build RealGame.exe: CXX_EXECUTABLE_LINKER__RealGame_Debug CMakeFiles/RealGame.dir/main.cpp.obj CMakeFiles/RealGame.dir/src/Map.cpp.obj CMakeFiles/RealGame.dir/src/Object.cpp.obj CMakeFiles/RealGame.dir/src/NullObject.cpp.obj CMakeFiles/RealGame.dir/src/Window.cpp.obj CMakeFiles/RealGame.dir/src/Centre.cpp.obj CMakeFiles/RealGame.dir/src/AMineral.cpp.obj CMakeFiles/RealGame.dir/src/BMineral.cpp.obj CMakeFiles/RealGame.dir/src/Extractor.cpp.obj CMakeFiles/RealGame.dir/src/Equipment.cpp.obj CMakeFiles/RealGame.dir/src/TransmissionBelt.cpp.obj CMakeFiles/RealGame.dir/src/Cutter.cpp.obj CMakeFiles/RealGame.dir/src/RubbishBin.cpp.obj CMakeFiles/RealGame.dir/src/Cursor.cpp.obj CMakeFiles/RealGame.dir/src/Timer.cpp.obj CMakeFiles/RealGame.dir/src/NullMineral.cpp.obj CMakeFiles/RealGame.dir/src/HalfAMineral.cpp.obj CMakeFiles/RealGame.dir/src/MainInterface.cpp.obj CMakeFiles/RealGame.dir/src/Level.cpp.obj CMakeFiles/RealGame.dir/src/Store.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\RealGame.dir

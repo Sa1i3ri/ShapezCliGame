@@ -28,7 +28,6 @@ enum type{
     nullObject,
     nullMineral,
     halfAmineral,
-    halfBmineral,
 };
 
 

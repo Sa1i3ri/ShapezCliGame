@@ -12,9 +12,8 @@ void Window::Set_Color(int color) {
 void Window::display(Map *map) {
     system("cls");
 
-
-    for(int i =0;i<H;i++){
-        for(int j =0;j<W;j++){
+    for(int i =0;i<Map::H;i++){
+        for(int j =0;j<Map::W;j++){
             //打印光标
             if(i == map->cursor->x && j == map->cursor->y){
                 color(map->cursor->color);
@@ -44,12 +43,65 @@ void Window::display(Map *map) {
         }
         cout<<endl;
     }
-    color(indigo);
-    printf("overall money: %d\n",map->overallValue);
 
+    color(red);
+    printf("Mission 1 : hand over 20 AMineral ");
+    if(map->mission1){
+        //任务1完成
+        color(indigo);
+        printf("Completed");
+    }
+    ::printf("\n");
+
+    color(blue);
+    printf("Mission 2 : hand over 30 BMineral ");
+    if(map->mission2){
+        //任务2完成
+        color(indigo);
+        printf("Completed");
+    }
+    ::printf("\n");
+
+    color(green);
+    printf("Mission 3 : hand over 50 half AMineral ");
+    if(map->mission3){
+        //任务3完成
+        color(indigo);
+        printf("Completed");
+    }
+    ::printf("\n");
 
     color(white);
-    printf("use keyboard to choose\n");
+    ::printf("Extractor speed : %d\t",Equipment::ExtractorInterval);
+    ::printf("Transmission speed : %d\t",Equipment::TransmissionBeltInterval);
+    ::printf("Cutter speed : %d\t",Equipment::CutterInterval);
+    ::printf("\n");
+
+    if(map->upGradeTimes>0){
+        color(red);
+        ::printf("Press Z to upgrade Extractor\t");
+        color(blue);
+        ::printf("Press X to upgrade TransmissionBelt\t");
+        color(green);
+        ::printf("Press C to upgrade Cutter\t");
+
+        ::printf("\n");
+    }
+
+    color(indigo);
+    printf("overall money: %d\n",map->overallValue);
+    color(red);
+    printf("AMineral number : %d\n",map->AMineralNum);
+    color(blue);
+    printf("BMineral number: %d\n",map->BMineralNum);
+    color(purple);
+    printf("HalfAMineral number: %d\n",map->HalfAMineralNum);
+
+
+//    color(white);
+//    printf("use keyboard to choose\n");
+    printf("\n");
+
     color(green);
     printf("1:Transmission belt ");
     color(yellow);
@@ -69,6 +121,7 @@ void Window::display(Map *map) {
     color(map->cursor->curObj->color);
     printf("%c",map->cursor->curObj->photo);
 
+
 }
 
 void Window::color(int c) {
@@ -83,3 +136,7 @@ void Window::color(int c) {
         case indigo : SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY | FOREGROUND_BLUE|FOREGROUND_GREEN);break;
     }
 }
+
+
+
+

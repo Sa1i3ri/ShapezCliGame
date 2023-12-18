@@ -9,13 +9,15 @@
 #include<conio.h>        //使用 getch() 函数
 #include "Map.h"
 #include "Object.h"
+#include "MainInterface.h"
 using namespace std;
 
 class Window {
 public:
     void Set_Color(int color);
-    void color(int c);
+    static void color(int c);
     void display(Map *map);
+
 };
 
 

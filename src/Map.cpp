@@ -4,21 +4,57 @@
 
 #include "../header/Map.h"
 
+int Map::W = 30;
+int Map::H = 20;
+
 Map::Map() {
     this->cursor = new Cursor();
     this->overallValue = 0;
+    this->AMineralNum =0;
+    this->BMineralNum =0;
+    this->HalfAMineralNum =0;
+    this->mission1 = false;
+    this->mission2 = false;
+    this->mission3 = false;
+    //this->isUpgrade = false;
+    this->upGradeTimes = 0;
+    this->level1 = false;
+    this->level2 = false;
+    this->level3 = false;
 
-    for(int i = 0;i<H;i++){
-        for(int j = 0;j<W;j++){
-            this->board[i][j] = new NullObject();
+
+    for(int i =0;i<H;i++){
+        vector<Object*> temp;
+        for(int j=0;j<W;j++){
+            temp.push_back(new NullObject);
         }
+        this->board.push_back(temp);
     }
+
 
     this->cursor->containedObj = this->board[this->cursor->x][this->cursor->y];
 
+}
 
+void Map::initMap() {
+    this->cursor = new Cursor();
+    this->overallValue = 0;
+    this->AMineralNum =0;
+    this->BMineralNum =0;
+    this->HalfAMineralNum =0;
+    this->mission1 = false;
+    this->mission2 = false;
+    this->mission3 = false;
+    //this->isUpgrade = false;
+    this->upGradeTimes = 0;
+    this->level1 = false;
+    this->level2 = false;
+    this->level3 = false;
+
+    this->cursor->containedObj = this->board[this->cursor->x][this->cursor->y];
 
 }
+
 
 void Map::moveCursor(direction dir) {
     if(dir == direction::up){
@@ -57,10 +93,6 @@ direction Map::inputForMoveCursor(char input) {
         return direction::right;
     }
     return direction::up;
-}
-
-void Map::transmission() {
-
 }
 
 void Map::cursorInputChoose(char input) {
@@ -140,6 +172,9 @@ void Map::cursorInputChoose(char input) {
 
         }else if(input=='r'){
             //转向
+            if(this->cursor->curObj->type == type::nullObject){
+                return;
+            }
             direction toDir = direction::up;
             auto curEquipment = (Equipment *) this->cursor->curObj;
             direction curDir = curEquipment->dir;
@@ -365,16 +400,21 @@ void Map::operateEverything() {
     auto ToDir = new vector<Equipment *>;
     for(int i = 0;i<H;i++){
         for(int j=0;j<W;j++){
-            this->ExtractorOperate(i,j);
             this->TransmissionBeltOperate(i,j,curTrans,ToDir);
-            this->CutterOperate(i,j);
-            this->RubbishBinOperate(i,j);
+        }
+    }
+    Transmisson(curTrans,ToDir);
+    for(int i = 0;i<H;i++){
+        for(int j=0;j<W;j++){
             this->CentreOperate(i,j);
+            this->CutterOperate(i,j);
+            this->ExtractorOperate(i,j);
+            this->RubbishBinOperate(i,j);
             updateEquipmentCurTime(i,j);
         }
     }
 
-    Transmisson(curTrans,ToDir);
+
 
 }
 
@@ -592,14 +632,77 @@ void Map::CentreOperate(int x, int y) {
     auto curCentre = (Centre *) this->board[x][y];
     if(curCentre->curTime == curCentre->interval){
         curCentre->curTime = 0;
-        if(curCentre->mineral->type != type::nullMineral){
-            //加钱
-            this->overallValue += curCentre->mineral->value;
-            ::free(curCentre->mineral);
-            curCentre->mineral = new NullMineral();
-        }
+        this->missionsJudge(x,y);
 
     }
 }
+
+void Map::AMineralMission(Centre *curCentre) {
+    if(curCentre->mineral->type == type::Amineral){
+        this->AMineralNum++;
+        this->overallValue += curCentre->mineral->value;
+
+        free(curCentre->mineral);
+        curCentre->mineral = new NullMineral();
+    }
+}
+
+void Map::BMineralMission(Centre *curCentre) {
+    if(curCentre->mineral->type == type::Bmineral){
+        this->BMineralNum++;
+        this->overallValue += curCentre->mineral->value;
+
+        free(curCentre->mineral);
+        curCentre->mineral = new NullMineral();
+    }
+
+}
+
+void Map::HalfAMineralMission(Centre *curCentre) {
+    if(curCentre->mineral->type == type::halfAmineral){
+        this->HalfAMineralNum++;
+        this->overallValue += curCentre->mineral->value;
+
+        free(curCentre->mineral);
+        curCentre->mineral = new NullMineral();
+    }
+
+}
+
+void Map::missionsJudge(int x,int y) {
+
+    auto curCentre = (Centre *) this->board[x][y];
+
+    this->AMineralMission(curCentre);
+    this->BMineralMission(curCentre);
+    this->HalfAMineralMission(curCentre);
+
+
+    if(this->AMineralNum == AMineralTarget || this->BMineralNum == BMineralTarget
+    || this->HalfAMineralNum == HalfAMineralTarget){
+        //完成任务，进行升级
+        //this->isUpgrade = true;
+        if(this->AMineralNum == AMineralTarget && this->mission1== false){
+            this->upGradeTimes++;
+            this->mission1 = true;
+        }
+        if(this->BMineralNum == BMineralTarget && this->mission2 == false){
+            this->upGradeTimes++;
+            this->mission2 = true;
+        }
+        if(this->HalfAMineralNum == HalfAMineralTarget && this->mission3 == false){
+            this->upGradeTimes++;
+            this->mission3 = true;
+        }
+
+    }
+
+}
+
+
+
+
+
+
 
 
