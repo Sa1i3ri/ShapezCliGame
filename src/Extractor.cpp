@@ -8,8 +8,7 @@ Extractor::Extractor() : Equipment() {
     this->color = yellow;
     this->mineral = new NullMineral();
     this->type = extractor;
-    this->interval = ExtractorInterval;
-    this->curTime = this->interval;
+    this->curTime = 0;
 }
 
 Extractor::Extractor(direction dir) {
@@ -17,8 +16,7 @@ Extractor::Extractor(direction dir) {
     this->color = yellow;
     this->mineral = nullptr;
     this->dir = dir;
-    this->interval = ExtractorInterval;
-    this->curTime = this->interval;
+    this->curTime = 0;
     if(dir == direction::up){
         this->photo = '^';
     }else if(dir == direction::right){

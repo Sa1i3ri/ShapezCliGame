@@ -3,3 +3,6 @@
 //
 
 #include "../header/Mineral.h"
+
+int Mineral::AMineralValue = 2;
+int Mineral::BMineralValue = 1;

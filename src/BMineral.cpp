@@ -5,7 +5,6 @@
 #include "../header/BMineral.h"
 
 BMineral::BMineral() : Mineral() {
-    this->value = 1;
     this->color = blue;
     this->photo = '#';
     this->isCutble = false;

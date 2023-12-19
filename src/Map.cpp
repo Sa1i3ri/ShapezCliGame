@@ -6,10 +6,18 @@
 
 int Map::W = 30;
 int Map::H = 20;
+int Map::CentreSize = 1;
+int Map::AMineralSize = 0;
+int Map::BMineralSize = 0;
+int Map::money = 0;
+//升级过，就会是true
+bool Map::isUpgrade = false;
+
 
 Map::Map() {
+    //this->isInit = true;
     this->cursor = new Cursor();
-    this->overallValue = 0;
+    //this->money = 0;
     this->AMineralNum =0;
     this->BMineralNum =0;
     this->HalfAMineralNum =0;
@@ -18,19 +26,8 @@ Map::Map() {
     this->mission3 = false;
     //this->isUpgrade = false;
     this->upGradeTimes = 0;
-    this->level1 = false;
-    this->level2 = false;
-    this->level3 = false;
 
-
-    for(int i =0;i<H;i++){
-        vector<Object*> temp;
-        for(int j=0;j<W;j++){
-            temp.push_back(new NullObject);
-        }
-        this->board.push_back(temp);
-    }
-
+    sizeMap();
 
     this->cursor->containedObj = this->board[this->cursor->x][this->cursor->y];
 
@@ -38,7 +35,7 @@ Map::Map() {
 
 void Map::initMap() {
     this->cursor = new Cursor();
-    this->overallValue = 0;
+    //this->money = 0;
     this->AMineralNum =0;
     this->BMineralNum =0;
     this->HalfAMineralNum =0;
@@ -47,12 +44,21 @@ void Map::initMap() {
     this->mission3 = false;
     //this->isUpgrade = false;
     this->upGradeTimes = 0;
-    this->level1 = false;
-    this->level2 = false;
-    this->level3 = false;
+
 
     this->cursor->containedObj = this->board[this->cursor->x][this->cursor->y];
 
+}
+
+void Map::sizeMap() {
+    this->board = *new vector<vector<Object*>>;
+    for(int i =0;i<H;i++){
+        vector<Object*> temp;
+        for(int j=0;j<W;j++){
+            temp.push_back(new NullObject);
+        }
+        this->board.push_back(temp);
+    }
 }
 
 
@@ -205,7 +211,7 @@ void Map::ExtractorOperate(int x, int y) {
 
 
     auto curExt = (Extractor *) this->board[x][y];
-    if(curExt->curTime == curExt->interval){
+    if(curExt->curTime >= this->ExtractorInterval){
         curExt->curTime=0;
         //时间到了才能执行
 
@@ -295,7 +301,7 @@ void Map::TransmissionBeltOperate(int x, int y,vector<TransmissionBelt*> *curTra
 
     auto curTrans = (TransmissionBelt *) this->board[x][y];
 
-    if(curTrans->curTime == curTrans->interval){
+    if(curTrans->curTime >= this->TransmissionBeltInterval){
         curTrans->curTime = 0;
         if(curTrans->mineral->type==type::nullMineral){
             return;
@@ -450,7 +456,7 @@ void Map::RubbishBinOperate(int x, int y) {
 
     auto curRubbishBin = (RubbishBin *) this->board[x][y];
 
-    if(curRubbishBin->curTime == curRubbishBin->interval){
+    if(curRubbishBin->curTime >= this->RubbishBinInterval){
         curRubbishBin->curTime = 0;
         if(curRubbishBin->mineral->type == type::nullMineral){
             return;
@@ -469,7 +475,7 @@ void Map::CutterOperate(int x, int y) {
     }
 
     auto curCutter = (Cutter *) this->board[x][y];
-    if(curCutter->curTime == curCutter->interval){
+    if(curCutter->curTime >= this->CutterInterval){
         //时间到了才能操作
         curCutter->curTime = 0;
         if(curCutter->mineral->type == type::nullMineral){
@@ -630,7 +636,7 @@ void Map::CentreOperate(int x, int y) {
         return;
     }
     auto curCentre = (Centre *) this->board[x][y];
-    if(curCentre->curTime == curCentre->interval){
+    if(curCentre->curTime == this->CentreInterval){
         curCentre->curTime = 0;
         this->missionsJudge(x,y);
 
@@ -640,7 +646,7 @@ void Map::CentreOperate(int x, int y) {
 void Map::AMineralMission(Centre *curCentre) {
     if(curCentre->mineral->type == type::Amineral){
         this->AMineralNum++;
-        this->overallValue += curCentre->mineral->value;
+        Map::money += Mineral::AMineralValue;
 
         free(curCentre->mineral);
         curCentre->mineral = new NullMineral();
@@ -650,7 +656,7 @@ void Map::AMineralMission(Centre *curCentre) {
 void Map::BMineralMission(Centre *curCentre) {
     if(curCentre->mineral->type == type::Bmineral){
         this->BMineralNum++;
-        this->overallValue += curCentre->mineral->value;
+        Map::money += Mineral::BMineralValue;
 
         free(curCentre->mineral);
         curCentre->mineral = new NullMineral();
@@ -661,7 +667,7 @@ void Map::BMineralMission(Centre *curCentre) {
 void Map::HalfAMineralMission(Centre *curCentre) {
     if(curCentre->mineral->type == type::halfAmineral){
         this->HalfAMineralNum++;
-        this->overallValue += curCentre->mineral->value;
+        Map::money += Mineral::AMineralValue / 2;
 
         free(curCentre->mineral);
         curCentre->mineral = new NullMineral();
@@ -698,6 +704,8 @@ void Map::missionsJudge(int x,int y) {
     }
 
 }
+
+
 
 
 

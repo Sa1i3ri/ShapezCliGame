@@ -10,15 +10,18 @@
 #include "Level.h"
 #include "Window.h"
 #include "Map.h"
+#include "AMineral.h"
+#include "BMineral.h"
 using namespace std;
 
+const int enlargeCentre = 10, enlargeAMineral = 10,enlargeBMineral=10,enlargeMap = 20,increaseAMineralValue = 25,increaseBMineralValue = 25;
 
 class Store {
 private:
     void displayTitle();
 public:
-    Map *map;
-    Store(Map *map);
+
+    Store();
     void display();
 
     //全局升级

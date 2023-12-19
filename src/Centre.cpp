@@ -9,8 +9,8 @@ Centre::Centre() {
     this->photo = '@';
     this->type = type::centre;
     this->curTime =0;
-    this->interval=1;
     this->mineral = new NullMineral();
+    this->dir = direction::up;
 }
 
 void Centre::changeDirection(direction dir) {

@@ -9,8 +9,8 @@ RubbishBin::RubbishBin() : Equipment() {
     this->color = white;
     this->photo = '*';
     this->mineral = new NullMineral;
-    this->interval = RubbishBinInterval;
-    this->curTime = this->interval;
+    this->curTime = 0;
+    this->dir = up;
 }
 
 void RubbishBin::changeDirection(direction dir) {

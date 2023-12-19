@@ -6,7 +6,6 @@
 
 HalfAMineral::HalfAMineral():AMineral() {
     this->photo = '+';
-    this->value /=2;
     this->isCutble = false;
     this->color = red;
     this->type = type::halfAmineral;

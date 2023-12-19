@@ -6,7 +6,7 @@
 
 MainInterface::MainInterface() {}
 
-void MainInterface::display(Map *map) {
+void MainInterface::display() {
     system("cls");
 
     displayTitle();
@@ -29,6 +29,12 @@ void MainInterface::display(Map *map) {
 
     Window::color(indigo);
     printf("Press s to enter store\n");
+
+    Window::color(yellow);
+    printf("Press b to save\n");
+    Window::color(yellow);
+    printf("Press r to load\tPress t to start new game\n");
+
 
 
 }

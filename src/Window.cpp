@@ -62,7 +62,7 @@ void Window::display(Map *map) {
     }
     ::printf("\n");
 
-    color(green);
+    color(purple);
     printf("Mission 3 : hand over 50 half AMineral ");
     if(map->mission3){
         //任务3完成
@@ -72,9 +72,9 @@ void Window::display(Map *map) {
     ::printf("\n");
 
     color(white);
-    ::printf("Extractor speed : %d\t",Equipment::ExtractorInterval);
-    ::printf("Transmission speed : %d\t",Equipment::TransmissionBeltInterval);
-    ::printf("Cutter speed : %d\t",Equipment::CutterInterval);
+    ::printf("Extractor speed : %d\t",map->ExtractorInterval);
+    ::printf("Transmission speed : %d\t",map->TransmissionBeltInterval);
+    ::printf("Cutter speed : %d\t",map->CutterInterval);
     ::printf("\n");
 
     if(map->upGradeTimes>0){
@@ -89,7 +89,7 @@ void Window::display(Map *map) {
     }
 
     color(indigo);
-    printf("overall money: %d\n",map->overallValue);
+    printf("money: %d\n",map->money);
     color(red);
     printf("AMineral number : %d\n",map->AMineralNum);
     color(blue);

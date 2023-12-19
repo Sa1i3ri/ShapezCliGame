@@ -10,7 +10,6 @@ TransmissionBelt::TransmissionBelt(direction dir) : Equipment() {
     this->type = transmissionBelt;
     this->mineral = new NullMineral();
     this->dir = dir;
-    this->interval  = TransmissionBeltInterval;
     this->curTime = 0;
     if(dir == direction::up){
         this->photo = '^';

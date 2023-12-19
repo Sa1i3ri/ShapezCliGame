@@ -23,7 +23,7 @@ private:
 public:
     MainInterface();
 
-    void display(Map *map);
+    void display();
 
 
 

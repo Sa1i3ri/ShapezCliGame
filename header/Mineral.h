@@ -7,9 +7,11 @@
 #include "Object.h"
 
 
+
 class Mineral: public Object{
 public:
-    int value;
+    static int AMineralValue;
+    static int BMineralValue;
     bool isCutble;
 
 };

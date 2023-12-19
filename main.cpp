@@ -15,32 +15,35 @@
 #include "header/Level.h"
 #include "header/MainInterface.h"
 #include "header/Store.h"
+#include "header/SavingFile.h"
 
-Map *MainMap = new Map();
+Map *Level1Map = new Map();
+Map *Level2Map = new Map();
+Map *Level3Map = new Map();
 MainInterface *mainInterface = new MainInterface();
-Store *store = new Store(MainMap);
+Store *store = new Store();
 Window *window = new Window();
 
 
-Level *Level1 = new Level(LevelType::level1,MainMap);
-Level *Level2 = new Level(LevelType::level2,MainMap);
-Level *Level3 = new Level(LevelType::level3,MainMap);
+Level *Level1 = new Level(LevelType::level1,Level1Map);
+Level *Level2 = new Level(LevelType::level2,Level2Map);
+Level *Level3 = new Level(LevelType::level3,Level3Map);
 
 
 
 void play(Level *level){
-    level->LevelLoad();
+    level->upgradeReInit();
 
-    window->display(MainMap);
+    window->display(level->map);
     while (true){
         char input = getch();
         if(input =='w' || input=='s'||input=='a'||input=='d'){
             //移动光标
-            MainMap->moveCursor(MainMap->inputForMoveCursor(input));
+            level->map->moveCursor(level->map->inputForMoveCursor(input));
         }
         if(input == '1' || input == '2' || input == '3' || input=='4' ||input=='5'|| input==' '||input=='r'){
             //放置物品
-            MainMap->cursorInputChoose(input);
+            level->map->cursorInputChoose(input);
         }
         if(input == '0'){
             //退出
@@ -49,7 +52,7 @@ void play(Level *level){
 
         if(input == 'p'){
             //物品运作
-            MainMap->operateEverything();
+            level->map->operateEverything();
         }
 
         if(input == 'z' || input == 'x' || input =='c'){
@@ -57,7 +60,7 @@ void play(Level *level){
             level->upgrade(input);
         }
 
-        window->display(MainMap);
+        window->display(level->map);
         Sleep(10);
 
     }
@@ -69,19 +72,31 @@ void enterStore() {
     while (true) {
         char input = getch();
         if (input == '0') {
-            if (input == '0') {
-                return;
-            }
+            return;
         }
+        if (input == '1' || input == '2' || input=='3' || input=='4'||input=='5'||input=='6') {
+            store->upgrade(input);
+        }
+
+
         store->display();
     }
 }
 
+void init(){
+    Level1->levelInit();
+    Level1->mapInit();
+    Level2->levelInit();
+    Level2->mapInit();
+    Level3->levelInit();
+    Level3->mapInit();
+}
+
 void Interface(){
-    mainInterface->display(MainMap);
+    mainInterface->display();
     while (true){
         char input = getch();
-        if(input=='1' || input=='2' || input=='3' || input=='0' || input=='s'){
+        if(input=='1' || input=='2' || input=='3' || input=='0' || input=='s'||input=='b'||input=='r'||input=='t'){
             if(input=='0'){
                 return;
             }
@@ -94,15 +109,28 @@ void Interface(){
                 play(Level3);
             }
 
+            //进入商店
             if(input == 's'){
                 enterStore();
             }
 
-            //进入商店
+            if(input=='b'){
+                SavingFile::writeFile("../temp.csv",Level1,Level2,Level3);
+            }
+
+            if(input == 'r'){
+                SavingFile::readFile("../temp.csv",Level1,Level2,Level3);
+            }
+
+            if(input=='t'){
+                init();
+            }
+
+
 
         }
 
-        mainInterface->display(MainMap);
+        mainInterface->display();
         //Sleep(10);
 
     }
@@ -113,15 +141,22 @@ void Interface(){
 
 
 
+
+
 int main(){
+    //SavingFile::readFile("../file.csv",Level1,Level2,Level3);
 
+    //SavingFile::writeFile("../temp.csv",Level1,Level2->map,Level3->map);
 
-    //play(window,MainMap,Level2);
+    //SavingFile::readFile("../temp.csv",Level1,Level2,Level3);
+    //play(Level1);
     Interface();
+    //store->upgrade('4');
+    //play(Level1);
+    //SavingFile::read("../file.csv");
 
 
-    Sleep(2000);
-
+    //Sleep(2000);
     return 0;
 }
 

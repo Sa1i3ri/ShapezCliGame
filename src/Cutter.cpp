@@ -16,8 +16,7 @@ Cutter::Cutter(direction dir, order ord) {
     this->mineral = new NullMineral();
     this->dir = dir;
     this->ord = ord;
-    this->interval = CutterInterval;
-    this->curTime = this->interval;
+    this->curTime = 0;
 
     if(dir == direction::up){
         this->photo = '^';

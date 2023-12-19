@@ -27,6 +27,7 @@ using namespace std;
 
 //任务目标
 const int AMineralTarget = 20, BMineralTarget = 30, HalfAMineralTarget = 50;
+const int MaxCentreSize = 3,MaxAMineralSize = 3,MaxBMineralSize = 3,MaxH = 50,MaxW = 50;
 
 
 class Map {
@@ -44,13 +45,23 @@ private:
     void HalfAMineralMission(Centre *curCentre);
     void missionsJudge(int x,int y);
 public:
+    //设置设备间隔
+    int ExtractorInterval=3;//3
+    int TransmissionBeltInterval=2;//2
+    int RubbishBinInterval=1;//1
+    int CutterInterval=3;//3
+    int CentreInterval=1;
+
+
+    //是否是第一次加载
+    //bool isInit;
     //地图大小
     static int H;
     static int W;
     Cursor *cursor;
 
     //玩家开采的数量
-    int overallValue;
+    static int money;
     int AMineralNum;
     int HalfAMineralNum;
     int BMineralNum;
@@ -59,18 +70,23 @@ public:
     bool mission1;
     bool mission2;
     bool mission3;
-    //是否要进行升级
-    //bool isUpgrade;
+    //是否升级过
+    static bool isUpgrade;
+    //要升级几次
     int upGradeTimes;
 
     //全局升级
-    int CentreSize= 1;// (1 + 2 * CentreSize) * (1 + 2 * CentreSize)
+    static int CentreSize;// (1 + 2 * CentreSize) * (1 + 2 * CentreSize)
+    static int AMineralSize;
+    static int BMineralSize;
 
     //Object *board[H][W];
     vector<vector<Object*>> board;
     Map();
     //初始化地图
     void initMap();
+    //根据当前H和W，设定地图大小
+    void sizeMap();
 
     //检测输入移动光标
     direction inputForMoveCursor(char input);
@@ -82,9 +98,6 @@ public:
 
 
 
-
-
-    void transmission();
 };
 
 
